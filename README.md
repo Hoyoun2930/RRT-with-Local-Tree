@@ -1,28 +1,32 @@
 # RRT-with-Local-Tree
 
 ## Abstract
-어떤 이미지가 AR (Augmented Reality)로 생성된 것인지 아닌지 구분하는 것은 까다로운 일이다. AR로 생성된 이미지는 가상의 물체를 현실 세계에 투영한 것이라 판단의 기준이 될 레퍼런스 이미지가 없기 때문이다. 본 연구는 이 문제를 해결고자 새로운 AR 이미지 판별 모델을 제안한다. 이 모델은 기존의 이미지 판별에 사용되던 CNN (Convolution Neural Network) 모델과 본 연구에서 새로이 제안하는 HNN (Histogram Neural Network) 모델을 앙상블 하여 구현되었다. 모델을 학습시키기 위하여 250장의 AR 이미지와 250장의 일반 이미지를 세그먼테이션 하여 데이터를 생성했으며, 해당 데이터를 통하여 모델을 학습시킨 결과 84.0%의 높은 정확도를 보였다. 
+RRT는 샘플링 기반 경로 알고리즘으로, 비홀로놈계에서 쉽게 경로계획이 가능한 알고리즘으로 인식되어왔습니다. 하지만 복잡한 맵에 대해서는 RRT 방법이 오랜 시간이걸린다는 단점이 있습니다. 본 연구에서는 이러한 단점을 해결하기 위한 알고리즘인, Local Tree의 효율을 보다 개선하고자 하였습니다. Local Tree는 시작 지점과 골 지점뿐만 아니라 랜덤한 점도 root로 하는 트리를 의미합니다. 본 연구에서는 Local Tree의 root를 Narrow passage(장애물 사이 좁은 경로)로 선택하는 방법을 적용하였습니다. 그 결과, Local Tree를 이용한 RRT 알고리즘의 수행 시간을 효과적으로 개선할 수 있음을 확인할 수 있었다.
 
 ### RRT ([Rapidly-exploring random tree](https://en.wikipedia.org/wiki/Rapidly-exploring_random_tree))
-![image](https://user-images.githubusercontent.com/62214506/78421533-5cf43600-7693-11ea-9335-67bcff85eb97.png)
-![image](https://user-images.githubusercontent.com/62214506/78421535-5e256300-7693-11ea-9b3f-6b23708768ae.png)
+![RRT](https://user-images.githubusercontent.com/62214506/79302933-9bf27900-7f28-11ea-94fd-8c5c5cf19af7.png)
 
-연구의 목표 정확도와 학습 시간 등을 고려하였을 때 과도한 Deep Layer 구조는 불필요하다고 생각하여 3개의 Convolution Layer를 비롯한 Shallow Network로 구성하였다. 본 연구의 목표는 입력된 이미지가 AR인지 Real 이미지인지 판별하는 것이므로 2-class classification을 수행하게 된다. 따라서 본 CNN 구현에는 Binary Classification을 상정하고 Parameter 및 Layer 배치를 진행하였다. 학습 이미지는 300x300 해상도로 리사이징 되어 CNN에 입력되고, 여러 필터 레이어를 거쳐 최종적으로 Fully Connect Layer에 의해 Binary 값이 결과로 출력된다. 
+La Valle에 의해 설계된 RRT는 시작 지점에서부터 트리를 랜덤하게 생성해가며 골 지점까지 경로를 탐색하는 경로계획 알고리즘입니다. RRT는 정해진 구역 안에서 랜덤한 좌표의 점을 선택합니다. 그리고 트리에서 가장 가까운 노드를 선택한 뒤, 그 노드로부터 랜덤한 점을 향해 step size만큼 트리를 뻗어나갑니다. 만약 장애물에 의해 뻗어나가는 것이 불가능하다면 트리가 자라지 않습니다. 만약 골과 가장 가까운 노드가 스텝 사이즈 이하라면 골과 트리를 연결하고 시작지점으로부터 골까지의 경로를 출력합니다.
 
-### HNN (Histogram Neural Network)
-![image](https://user-images.githubusercontent.com/62214506/78421538-5fef2680-7693-11ea-8ee1-7aeb26b9e2bb.png)
+### [Local Tree](https://ieeexplore.ieee.org/document/1308756)
+![Local Tree](https://user-images.githubusercontent.com/62214506/79307329-b11fd580-7f31-11ea-8529-d1c0b8eae598.png)
 
-HNN 모델은 오브젝트의 히스토그램 데이터와 오브젝트를 제외한 배경의 히스토그램 데이터를 학습을 위한 Train Data로 사용한다. HNN의 레이어는 총 2개의 2D Convolution Layer와 1개의 Fully-Connected Layer로 구성하였다.
+Local Tree란 시작 지점만을 root로 하고 트리를 뻗어나가는 것이 아니라 골 지점과 랜덤한 점도 root로 하는 트리를 의미합니다. 랜덤 점으로 기존 트리가 뻗어나가지 못할 경우, 일정 확률로 그 점에서 새로운 트리를 생성시키고, RRT와 똑같이 성장하며 트리끼리 만날 경우, 두 트리를 합치는 RRT입니다.
 
-### Ensemble
-CNN과 HNN을 통하여 학습된 두 가지 모델은 각각의 특장점이 있다. 그래서 두 모델이 잘 구분해내는 AR 이미지의 특징이 다른데, 이 두 모델의 장점을 합쳐 발전시키고자, 본 연구에서는 가중치를 둔 보팅 (Weighted voting) [방법](http://doi.org/10.1109/IJCNN.2009.5178708)의 아이디어를 사용하였다. 
+## Select local tree root
+![Narrow Passage1](https://user-images.githubusercontent.com/62214506/79307335-b2e99900-7f31-11ea-9e1f-21df6c9845de.png)
+
+Local Tree의 장점은 맵의 푸른 부분과 같은 좁은 부분을 탐색하는데 좋다는 것입니다. 하지만 Local Tree의 root로 붉은 부분에서 점을 택한다면 오히려 좋지 않은 결과가 발생할 수 있습니다. 이에 Local Tree의 장점을 최대한 살리기 위하여 Local Tree의 root로 Narrow passage를 잡는 방법에 대하여 고안해 보았으며 장점을 극대화 시켜 RRT의 효율을 높일 수 있을 것이라 판단하였습니다. 
+
+### Min Length Method
+![Narrow Passage2](https://user-images.githubusercontent.com/62214506/79307337-b2e99900-7f31-11ea-8894-6b8177ab8c6d.png)
+
+본 연구에서는 Narrow passage를 한 점을 기준으로 양 쪽이 막혀있고 다른 방향이 뚫려있는 곳을 Narrow passage라고 정의하였으며 Narrow passage를 찾아 root로 선택하는 알고리즘을 Min Length Method라 정의하였습니다.
 
 ## Result
-   |CNN|HNN|Ensemble
----|---|---|---|
-Validation Accuracy|57.9%|85.9%|84.0%|
-Validation Loss|6.5526|0.4223|   |
-Test Accuracy|66.9%|83.0%|   |
-Test Loss|5.0457|0.7677|   |
+![result](https://user-images.githubusercontent.com/62214506/79308506-aebe7b00-7f33-11ea-8936-e3ede81c731b.png)
 
-이러한 결과는 히스토그램이 AR 이미지 고유의 특징을 더 잘 부각시켜 줄 수 있다는 점과, 학습 속도의 한계 때문에 CNN 모델의 레이어를 깊게 구성하지 못하여 성능의 한계를 들어낸 것으로 보인다. CNN 모델의 한계 때문에 보팅을 이용한 앙상블 기법 역시 HNN 모델을 단독으로 사용하는 경우보다 오히려 정확도가 약간 떨어지는 결과를 얻은 것으로 해석된다. CNN 모델을 개선한다면 보다 나은 성능의 AR 이미지 판별 모델을 구현할 수 있을 것으로 보인다.
+Basic Local Tree 보다 Min Length Method를 이용한 Local Tree가 iteration number가 평균적으로 52.7%정도 적은 것을 확인할 수 있었습니다. 따라서 본 연구에서 설계한 Min Length Method를 이용한 Local Tree가 Basic Local Tree 보다 시간 측면에서 효율적이라는 것을 볼 수 있었습니다.
+
+결론적으로 본 연구는 Local Tree 알고리즘의 비효율적일 수 있는 랜덤하게 root를 선택하는 부분을 Min Length Method를 이용하여 Narrow passage를 root로 선택함으로써 Local Tree의 장점을 극대화 하였으며, 이를 이용한 RRT의 수행 시간을 단축 시켰습니다. 
+
