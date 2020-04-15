@@ -21,7 +21,12 @@ Local Tree의 장점은 맵의 푸른 부분과 같은 좁은 부분을 탐색�
 ### Min Length Method
 ![Narrow Passage2](https://user-images.githubusercontent.com/62214506/79307337-b2e99900-7f31-11ea-8894-6b8177ab8c6d.png)
 
-본 연구에서는 Narrow passage를 한 점을 기준으로 양 쪽이 막혀있고 다른 방향이 뚫려있는 곳을 Narrow passage라고 정의하였으며 Narrow passage를 찾아 root로 선택하는 알고리즘을 Min Length Method라 정의하였습니다.
+본 연구에서는 Narrow passage를 한 점을 기준으로 양 쪽이 막혀있고 다른 방향이 뚫려있는 곳을 Narrow passage라고 정의하였으며 Narrow passage를 찾아 root로 선택하는 알고리즘을 Min Length Method라 정의하였습니다. 자세한 과정은 다음과 같습니다.
+
+(1) 무작위로 한 점을 잡는다. 그 점을 q_rand라 한다.
+(2) (1)에서 찾은 점 q_rand 로부터 뻗어나갈 방향을 무작위로 결정한다.
+(3) q_rand 로부터 (2)에서 결정한 방향과 반대 방향으로 장애물과 걸릴 때까지 노드를 뻗어나가며 장애물에 걸릴 때까지 뻗은 노드의 길이 stepsize를 Narrow Passage의 가중치로 한다. 만약 일정 길이만큼 뻗어나가도 장애물에 걸리지 않을 경우 가중치를 Max로 한다.
+(4) (1)에서 (3) 과정을 n번 반복하여 가중치가 낮은 점 k를 선택해 Local Tree의 root로 선택한다.
 
 ## Result
 ![result](https://user-images.githubusercontent.com/62214506/79308506-aebe7b00-7f33-11ea-8936-e3ede81c731b.png)
