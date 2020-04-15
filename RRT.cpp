@@ -40,7 +40,6 @@ void match_stepsize(point& now,point& p);
 bool chkispath(list<point>::iterator& now, list<list<point> >::iterator& nowtree, list<list<point> >& loctree);
 void mergetree(list<list<point> >& loctree, list<point>::iterator& st_node,list<list<point> >::iterator& st,list<point>::iterator& end_node,list<list<point> >::iterator& end);
 void pathexist(list<point>::iterator start,list<list<point> >::iterator starttree, list<point>::iterator end,list<list<point> >::iterator endtree);
-int aroundobstacle(point& p,vector<sphere>& obs,int k,double distance);
 double root_min_distance(point& p, list<list<point> >& loctree);
 int symaroundobstacle(point& p,vector<sphere>& obs,int k,int maxind);
 long long int index;
@@ -299,31 +298,7 @@ void pathexist(list<point>::iterator start,list<list<point> >::iterator starttre
 	fclose(out);
 	*/
 }
-int aroundobstacle(point& p,vector<sphere>& obs,int k,double distance)
-{
-    int ret = 0;
-    point orient;
-    for(int i=0; i<DIM; i++)
-        orient.q[i] = 0.0;
-    for(int i=0; i<k; i++)
-    {
-        point pt = p;
-        point tmp;
-        for(int j=0; j<DIM; j++)
-            tmp.q[j] =       (rand()%1000/1000.0) - 0.5;
-        double leng = dist(orient,tmp);
-        if(leng==0)
-        {
-            i--;
-            continue;
-        }
-        for(int j=0; j<DIM; j++)
-            pt.q[j] +=         tmp.q[j]*distance/leng;
-        if(isinobstacle(pt,obs))
-            ret++;
-    }
-    return ret;
-}
+
 double root_min_distance(point& p, list<list<point> >& loctree)
 {
     double ret = 200.0;
