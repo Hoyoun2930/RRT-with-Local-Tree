@@ -1,7 +1,7 @@
 # RRT-with-Local-Tree
 
 ## Abstract
-RRT는 샘플링 기반 경로 알고리즘으로, 비홀로놈계에서 쉽게 경로계획이 가능한 알고리즘으로 인식되어왔습니다. 하지만 복잡한 맵에 대해서는 RRT 방법이 오랜 시간이걸린다는 단점이 있습니다. 본 연구에서는 이러한 단점을 해결하기 위한 알고리즘인, Local Tree의 효율을 보다 개선하고자 하였습니다. Local Tree는 시작 지점과 골 지점뿐만 아니라 랜덤한 점도 root로 하는 트리를 의미합니다. 본 연구에서는 Local Tree의 root를 Narrow passage(장애물 사이 좁은 경로)로 선택하는 방법을 적용하였습니다. 그 결과, Local Tree를 이용한 RRT 알고리즘의 수행 시간을 효과적으로 개선할 수 있음을 확인할 수 있었다.
+RRT는 샘플링 기반 경로 알고리즘으로, 비홀로놈계에서 쉽게 경로계획이 가능한 알고리즘으로 인식되어왔습니다. 하지만 복잡한 맵에 대해서는 RRT 방법이 오랜 시간이걸린다는 단점이 있습니다. 본 연구에서는 이러한 단점을 해결하기 위한 알고리즘인, Local Tree의 효율을 보다 개선하고자 하였습니다. Local Tree는 시작 지점과 골 지점뿐만 아니라 랜덤한 점도 root로 하는 트리를 의미합니다. 본 연구에서는 Local Tree의 root를 Narrow passage(장애물 사이 좁은 경로)로 선택하는 방법을 적용하였습니다. 그 결과, Local Tree를 이용한 RRT 알고리즘의 수행 시간을 효과적으로 개선할 수 있음을 확인할 수 있었습니다.
 
 ### RRT ([Rapidly-exploring random tree](https://en.wikipedia.org/wiki/Rapidly-exploring_random_tree))
 ![RRT](https://user-images.githubusercontent.com/62214506/79302933-9bf27900-7f28-11ea-94fd-8c5c5cf19af7.png)
