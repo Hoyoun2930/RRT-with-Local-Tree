@@ -6,7 +6,7 @@ RRT는 샘플링 기반 경로 알고리즘으로, 비홀로놈계에서 쉽게 
 ### RRT ([Rapidly-exploring random tree](https://en.wikipedia.org/wiki/Rapidly-exploring_random_tree))
 ![RRT](https://user-images.githubusercontent.com/62214506/79302933-9bf27900-7f28-11ea-94fd-8c5c5cf19af7.png)
 
-La Valle에 의해 설계된 RRT는 시작 지점에서부터 트리를 랜덤하게 생성해가며 골 지점까지 경로를 탐색하는 경로계획 알고리즘입니다. RRT는 정해진 구역 안에서 랜덤한 좌표의 점을 선택합니다. 그리고 트리에서 가장 가까운 노드를 선택한 뒤, 그 노드로부터 랜덤한 점을 향해 step size만큼 트리를 뻗어나갑니다. 만약 장애물에 의해 뻗어나가는 것이 불가능하다면 트리가 자라지 않습니다. 만약 골과 가장 가까운 노드가 스텝 사이즈 이하라면 골과 트리를 연결하고 시작지점으로부터 골까지의 경로를 출력합니다.
+La Valle에 의해 설계된 RRT는 시작 지점에서부터 트리를 랜덤하게 생성해가며 골 지점까지 경로를 탐색하는 경로계획 알고리즘입니다. RRT는 정해진 구역 안에서 랜덤한 좌표의 점을 선택합니다. 그리고 트리에서 가장 가까운 노드를 선택한 뒤, 그 노드로부터 랜덤한 점을 향해 step size만큼 트리를 뻗어나갑니다. 만약 장애물에 의해 뻗어나가는 것이 불가능하다면 트리가 자라지 않습니다. 만약 골과 가장 가까운 노드와 골 사이의 거리가 스텝 사이즈 이하라면 골과 트리를 연결하고 시작지점으로부터 골까지의 경로를 출력합니다.
 
 ### [Local Tree](https://ieeexplore.ieee.org/document/1308756)
 ![Local Tree](https://user-images.githubusercontent.com/62214506/79307329-b11fd580-7f31-11ea-8529-d1c0b8eae598.png)
